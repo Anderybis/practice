@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<fragment xmlns="http://jmix.io/schema/ui/fragment">
+    <data>
+        <instance id="operationDc"
+                  class="com.company.myoption.entity.Operation">
+            <fetchPlan extends="_base">
+                <property name="bill" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader/>
+        </instance>
+    </data>
+    <actions>
+        <action id="stopOperation" caption="msg://actions.Close"
+                primary="true"/>
+    </actions>
+    <layout height="250" width="250">
+        <progressBar id="operationProgress" align="BOTTOM_CENTER"/>
+        <button id="stopOperation" action="Stop" align="TOP_CENTER"/>
+    </layout>
+</fragment>
+
