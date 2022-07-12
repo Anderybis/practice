@@ -25,13 +25,6 @@
                 caption="msg:///actions.Select"
                 icon="LOOKUP_OK"
                 primary="true"/>
-        <action id="Cancellation"
-                caption="msg:///actions.Select"
-                primary="true"/>
-        <action id="Calculate"
-                caption="msg:///actions.Select"
-                primary="true"/>
-
     </actions>
     <dialogMode height="600"
                 width="800"/>
@@ -40,12 +33,14 @@
                 dataLoader="operationsDl">
             <properties include=".*"/>
         </filter>
-        <button id="calculateBtn" action="Calculate" caption="Calculate"/>
         <groupTable id="operationsTable"
                     width="100%"
                     dataContainer="operationsDc">
             <actions>
                 <action id="create" type="create"/>
+                <action id="cancellation"
+                        caption="msg:///actions.Cancellation"
+                        primary="true"/>
             </actions>
             <columns>
                 <column id="bill"/>
@@ -59,12 +54,11 @@
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn" action="operationsTable.create"/>
-                <button id="cancellationBtn" action="Cancellation" caption="Cancellation"/>
+                <button id="cancellationBtn" action="operationsTable.cancellation" caption="Cancellation"/>
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">
-            <button action="Cancellation"/>
-            <button action="Calculate"/>
+            <button action="operationsTable.cancellation"/>
             <button action="lookupSelectAction"/>
         </hbox>
     </layout>

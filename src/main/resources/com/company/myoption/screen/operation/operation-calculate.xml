@@ -6,7 +6,9 @@
     <data readOnly="true">
         <collection id="operationsDc"
                     class="com.company.myoption.entity.Operation">
-            <fetchPlan extends="_base"/>
+            <fetchPlan extends="_base">
+                <property name="bill" fetchPlan="_base"/>
+            </fetchPlan>
             <loader id="operationsDl">
                 <query>
                     <![CDATA[select e from Operation e]]>
@@ -31,17 +33,22 @@
     <dialogMode height="600"
                 width="800"/>
     <layout expand="operationsTable" spacing="true">
-        <filter id="filter"
-                dataLoader="operationsDl">
-            <properties include=".*"/>
-        </filter>
+        <label value="Категория"/>
+        <comboBox id="categoryType"
+                  dataContainer="operationsDc"
+                  property="category"
+                  caption="msg://com.company.myoption.entity/Operation.category"/>
+        <label value="Начало периода"/>
+        <dateField id="dateField1" property="date"/>
+        <label value="Конец периода"/>
+        <dateField id="dateField2" property="date"/>
         <groupTable id="operationsTable"
                     width="100%"
                     dataContainer="operationsDc">
             <actions>
-                <action id="refresh" type="refresh"/>
             </actions>
             <columns>
+                <column id="bill"/>
                 <column id="type"/>
                 <column id="sum"/>
                 <column id="date"/>
@@ -49,14 +56,6 @@
                 <column id="comment"/>
             </columns>
             <simplePagination/>
-            <buttonsPanel id="buttonsPanel"
-                          alwaysVisible="true">
-                <button id="refreshBtn" action="operationsTable.refresh"/>
-            </buttonsPanel>
         </groupTable>
-        <hbox id="lookupActions" spacing="true" visible="false">
-            <button action="lookupSelectAction"/>
-            <button action="lookupCancelAction"/>
-        </hbox>
     </layout>
 </window>

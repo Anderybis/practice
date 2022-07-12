@@ -24,8 +24,8 @@
                 caption="msg:///actions.Close"
                 icon="EDITOR_CANCEL"/>
     </actions>
-    <dialogMode height="600"
-                width="800"/>
+    <dialogMode height="auto"
+                width="auto"/>
     <layout spacing="true" expand="editActions">
         <form id="form" dataContainer="operationDc">
             <column width="350px">
@@ -35,7 +35,7 @@
                         <action id="entityClear" type="entity_clear"/>
                     </actions>
                 </entityPicker>
-                <textField id="typeField" property="type"/>
+                <textField id="typeField" property="type" editable="false"/>
                 <textField id="sumField" property="sum"/>
                 <dateField id="dateField" property="date"/>
                 <textField id="categoryField" property="category"/>

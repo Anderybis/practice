@@ -65,4 +65,7 @@ public class Bill {
     public void setId(UUID id) {
         this.id = id;
     }
+
+
+
 }

@@ -1,19 +1,18 @@
 package com.company.myoption.screen.operation;
 
-import io.jmix.ui.Dialogs;
+import io.jmix.ui.ScreenBuilders;
+import io.jmix.ui.Screens;
 import io.jmix.ui.action.Action;
-import io.jmix.ui.app.inputdialog.DialogActions;
-import io.jmix.ui.app.inputdialog.DialogOutcome;
-import io.jmix.ui.app.inputdialog.InputParameter;
-import io.jmix.ui.component.Button;
-import io.jmix.ui.component.GroupTable;
-import io.jmix.ui.component.Table;
+import io.jmix.ui.action.BaseAction;
+import io.jmix.ui.component.*;
+import io.jmix.ui.model.CollectionLoader;
 import io.jmix.ui.screen.*;
 import com.company.myoption.entity.Operation;
+import io.jmix.ui.screen.LookupComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.swing.text.html.parser.Entity;
-import javax.validation.constraints.Null;
+import javax.inject.Named;
+import java.util.Objects;
 import java.util.Set;
 
 @UiController("Operation.browse")
@@ -22,32 +21,39 @@ import java.util.Set;
 
 
 public class OperationBrowse extends StandardLookup<Operation> {
+
+
     @Autowired
-    private Dialogs dialogs;
-   @Subscribe("cancellationBtn")
+    private ScreenBuilders screenBuilders;
+
+
+    @Subscribe("cancellationBtn")
     public void onCancellationBtnClick(Button.ClickEvent event) {
-        dialogs.createInputDialog(this)
-                .withCaption("Get values")
-                .withParameters(
-                        InputParameter.dateTimeParameter("deliveryTime")
-                                .withCaption("Delivery Time")
-                                .withRequired(true),
-                        InputParameter.intParameter("sum")
-                                .withCaption("Sum")
-                                .withDefaultValue(1)
-                )
-                .withActions(DialogActions.OK_CANCEL)
-                .withCloseListener(closeEvent -> {
-                    if (closeEvent.closedWith(DialogOutcome.OK)) {
-                        String name = closeEvent.getValue("name");
-                        Double quantity = closeEvent.getValue("quantity");
-                        // process entered values...
-                    }
+        OperationEdit screen = (OperationEdit) screenBuilders.editor(Operation.class, this)
+                .newEntity()
+                .withInitializer(operation -> {
+
+                    operation.setBill(operationsTable.getSingleSelected().getBill());
+                    operation.setType("Возврат");
+                    operation.setSum(operationsTable.getSingleSelected().getSum());
+                    operation.setDate(operationsTable.getSingleSelected().getDate());
+                    operation.setCategory(operationsTable.getSingleSelected().getCategory());
+                    operation.setComment("Возврат от " + operationsTable.getSingleSelected().getDate().toString());
                 })
-                .show();
+                .withOpenMode(OpenMode.DIALOG)
+                .build();
+        screen.setCancel(true);
+        screen.show();
     }
 
 
+
+    @Install(to = "operationsTable.cancellation", subject = "enabledRule")
+    private boolean operationsTableCancellationEnabledRule() {
+        Operation selected = operationsTable.getSingleSelected();
+        if(selected == null) return false;
+        return !selected.getType().equals("Возврат");
+    }
 
 
 
@@ -55,10 +61,10 @@ public class OperationBrowse extends StandardLookup<Operation> {
     @Autowired
     private GroupTable<Operation> operationsTable;
 
-    @Install(to = "Cancellation", subject = "enabledRule")
+    @Install(to = "operationsTable.cancellation", subject = "enabledRule")
     private boolean cancellationEnabledRule() {
         Set<Operation> operation = operationsTable.getSelected();
-        return true;
+        return !operation.isEmpty();
     }
 
 

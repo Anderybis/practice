@@ -1,6 +1,9 @@
 package com.company.myoption.entity;
 
+import io.jmix.core.DeletePolicy;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
+import io.jmix.core.entity.annotation.OnDeleteInverse;
+import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 
 import javax.persistence.*;
@@ -9,19 +12,20 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
 
+@Table(name = "OPERATION")
 @JmixEntity
-@Table(name = "OPERATION", indexes = {
-        @Index(name = "IDX_OPERATION_BILL_ID", columnList = "BILL_ID")
-})
 @Entity
 public class Operation {
+
+    @InstanceName
     @JmixGeneratedValue
     @Column(name = "ID", nullable = false)
     @Id
     private UUID id;
 
-    @JoinColumn(name = "BILL_ID", nullable = false)
     @NotNull
+    @OnDeleteInverse(DeletePolicy.CASCADE)
+    @JoinColumn(name = "BILL_ID", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Bill bill;
 
@@ -45,6 +49,26 @@ public class Operation {
 
     @Column(name = "COMMENT_")
     private String comment;
+
+    public void setBill(Bill bill) {
+        this.bill = bill;
+    }
+
+    public Bill getBill() {
+        return bill;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getComment() {
         return comment;
@@ -82,19 +106,5 @@ public class Operation {
         return type;
     }
 
-    public Bill getBill() {
-        return bill;
-    }
 
-    public void setBill(Bill bill) {
-        this.bill = bill;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 }

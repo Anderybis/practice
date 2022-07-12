@@ -8,4 +8,5 @@ import org.springframework.context.event.EventListener;
 @UiDescriptor("bill-edit.xml")
 @EditedEntityContainer("billDc")
 public class BillEdit extends StandardEditor<Bill> {
+
 }
